@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -16,6 +16,26 @@ import {
 } from "@/components/ui/sidebar";
 
 export default function Layout() {
+  const location = useLocation();
+  const pathParts = location.pathname.split("/").filter(Boolean);
+
+  // Build breadcrumb data dynamically
+  const breadcrumbs = pathParts.map((part, index) => {
+    const path = "/" + pathParts.slice(0, index + 1).join("/");
+
+    // Label logic
+    const label =
+      part === "events"
+        ? "Events"
+        : /^\d+$/.test(part) // If part is numeric (event ID)
+        ? "Event Details"
+        : part
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase());
+
+    return { label, path };
+  });
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -29,16 +49,30 @@ export default function Layout() {
               className="mr-2 data-[orientation=vertical]:h-4"
             />
 
-            {/* Placeholder breadcrumb (will be dynamic later) */}
+            {/* Dynamic Breadcrumb */}
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Overview</BreadcrumbPage>
-                </BreadcrumbItem>
+                {breadcrumbs.length === 0 ? (
+                  // Dashboard page
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                  </BreadcrumbItem>
+                ) : (
+                  breadcrumbs.map((crumb, index) => (
+                    <BreadcrumbItem key={crumb.path}>
+                      {index === breadcrumbs.length - 1 ? (
+                        <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                      ) : (
+                        <>
+                          <BreadcrumbLink asChild>
+                            <Link to={crumb.path}>{crumb.label}</Link>
+                          </BreadcrumbLink>
+                          <BreadcrumbSeparator />
+                        </>
+                      )}
+                    </BreadcrumbItem>
+                  ))
+                )}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
@@ -46,7 +80,7 @@ export default function Layout() {
 
         {/* Main content area */}
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <Outlet /> {/* Page content will render here */}
+          <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>
