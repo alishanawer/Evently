@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Literal
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
@@ -10,6 +10,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    role: Literal["user", "admin"] = "user"  # default user role
 
 
 class UserLogin(BaseModel):
