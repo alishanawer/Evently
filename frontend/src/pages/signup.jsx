@@ -1,7 +1,13 @@
+import { useState } from "react";
 import { GalleryVerticalEnd } from "lucide-react";
 import { SignupForm } from "@/components/signup-form";
+import Loader from "@/components/loader";
 
 export default function SignupPage() {
+  const [loading, setLoading] = useState(false);
+
+  if (loading) return <Loader fullScreen />;
+
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -11,7 +17,7 @@ export default function SignupPage() {
           </div>
           Evently
         </a>
-        <SignupForm />
+        <SignupForm setLoading={setLoading} />
       </div>
     </div>
   );
