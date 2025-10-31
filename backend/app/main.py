@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.routers import auth, event
 from app.core.config import settings
+from app.routers import auth, event, registration
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -23,6 +23,7 @@ app.add_middleware(
 # Register routers
 app.include_router(auth.router)
 app.include_router(event.router)
+app.include_router(registration.router)
 
 
 @app.get("/")
