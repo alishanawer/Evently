@@ -1,48 +1,72 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import EventCard from "@/components/event-card";
+import { getAllEvents } from "@/api/events";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/components/loader";
 
-export default function Events() {
+export default function EventsPage() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const events = [
-    { id: 1, title: "Tech Meetup", date: "2025-11-02", price: "Free" },
-    { id: 2, title: "AI Workshop", date: "2025-11-05", price: "$10" },
-    { id: 3, title: "Startup Summit", date: "2025-11-10", price: "$20" },
-    { id: 4, title: "Tech Meetup", date: "2025-11-02", price: "Free" },
-    { id: 5, title: "AI Workshop", date: "2025-11-05", price: "$10" },
-    { id: 6, title: "Startup Summit", date: "2025-11-10", price: "$20" },
-  ];
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(null);
+
+    getAllEvents()
+      .then((data) => {
+        if (!mounted) return;
+        setEvents(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        setError(err?.response?.data?.detail || "Failed to load events");
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [navigate]);
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Upcoming Events</h1>
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {events.map((event) => (
-          <Card key={event.id} className="flex flex-col justify-between">
-            <CardHeader>
-              <CardTitle>{event.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">📅 {event.date}</p>
-              <p className="text-sm text-muted-foreground">💰 {event.price}</p>
-            </CardContent>
-            <CardFooter>
-              <Button
-                className="w-full"
-                onClick={() => navigate(`/events/${event.id}`)}>
-                View Details
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Upcoming Events</h1>
+        <div>
+          <button
+            className="rounded px-3 py-1 border text-sm hover:bg-slate-50"
+            onClick={() => navigate("/admin/events")}
+            aria-label="Manage events (admin)">
+            Manage Events
+          </button>
+        </div>
       </div>
+
+      {loading && <Loader />}
+
+      {error && (
+        <div className="rounded bg-red-50 border border-red-200 p-4 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && events.length === 0 && (
+        <div className="text-center text-muted-foreground py-12">
+          No upcoming events. Check back later.
+        </div>
+      )}
+
+      {!loading && !error && events.length > 0 && (
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((ev) => (
+            <EventCard key={ev.event_id} event={ev} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
