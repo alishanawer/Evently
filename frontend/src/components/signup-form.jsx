@@ -47,8 +47,8 @@ export function SignupForm({ className, setLoading, ...props }) {
     try {
       const res = await signup(data);
       saveToken(res.access_token);
-      toast.success("Signup successful!");
-      navigate("/");
+      toast.success("Signup successful! Please log in.");
+      navigate("/login");
     } catch (err) {
       console.error("Signup failed:", err);
       toast.error(
