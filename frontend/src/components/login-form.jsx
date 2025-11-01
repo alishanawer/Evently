@@ -35,7 +35,6 @@ export function LoginForm({ className, setLoading, ...props }) {
 
     try {
       const res = await login(data);
-      saveToken(res.access_token);
       toast.success("Login successful!");
       navigate("/");
     } catch (err) {
