@@ -36,14 +36,6 @@ export default function EventsPage() {
     <div className="p-4">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Upcoming Events</h1>
-        <div>
-          <button
-            className="rounded px-3 py-1 border text-sm hover:bg-slate-50"
-            onClick={() => navigate("/admin/events")}
-            aria-label="Manage events (admin)">
-            Manage Events
-          </button>
-        </div>
       </div>
 
       {loading && <Loader />}

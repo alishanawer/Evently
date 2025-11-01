@@ -123,7 +123,7 @@ export default function EventCard({ event }) {
             {event.price !== undefined && (
               <div className="flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-gray-500" />
-                <span>{event.price === 0 ? "Free" : `$${event.price}`}</span>
+                <span>{event.price === 0 ? "Free" : `${event.price}`}</span>
               </div>
             )}
           </div>
@@ -174,7 +174,7 @@ export default function EventCard({ event }) {
               {event.price !== undefined && (
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-gray-500" />
-                  <span>{event.price === 0 ? "Free" : `$${event.price}`}</span>
+                  <span>{event.price === 0 ? "Free" : `${event.price}`}</span>
                 </div>
               )}
             </div>

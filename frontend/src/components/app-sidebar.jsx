@@ -27,6 +27,7 @@ export function AppSidebar({ ...props }) {
   const navMain = [
     { title: "Dashboard", url: "/", icon: SquareTerminal },
     { title: "Events", url: "/events", icon: Bot },
+    { title: "Manage Events", url: "/admin/events", icon: Settings2 },
     { title: "Tickets", url: "/tickets", icon: BookOpen },
     { title: "Settings", url: "/settings", icon: Settings2 },
   ];
