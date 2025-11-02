@@ -14,6 +14,8 @@ class RegistrationCreate(RegistrationBase):
 class RegistrationOut(BaseModel):
     reg_id: int
     user_id: int
+    user_name: Optional[str] = None
+    user_email: Optional[str] = None
     event_id: int
     event_title: Optional[str] = None
     event_date: Optional[date] = None

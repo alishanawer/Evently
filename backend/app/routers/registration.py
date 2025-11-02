@@ -1,3 +1,4 @@
+from app.models.user import User
 from sqlalchemy.orm import Session
 from app.models.event import Event
 from app.models.ticket import Ticket
@@ -133,11 +134,14 @@ def view_event_registrations(
     result = []
     for reg in regs:
         ticket = db.query(Ticket).filter(Ticket.reg_id == reg.reg_id).first()
+        user = db.query(User).filter(User.user_id == reg.user_id).first()
         result.append({
             "reg_id": reg.reg_id,
             "user_id": reg.user_id,
             "event_id": reg.event_id,
             "reg_date": reg.reg_date,
+            "user_name": user.name if user else None,
+            "user_email": user.email if user else None,
             "ticket_id": ticket.ticket_id if ticket else None,
             "ticket_status": ticket.status if ticket else None
         })
