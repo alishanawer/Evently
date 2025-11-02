@@ -62,18 +62,24 @@ def register_for_event(
     }
 
 
-# Cancel Registration — User Only
+# Cancel Registration — User or Admin
 @router.delete("/{reg_id}", status_code=status.HTTP_204_NO_CONTENT)
 def cancel_registration(
     reg_id: int,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    # Check if registration exists and belongs to user
-    registration = db.query(Registration).filter(
-        Registration.reg_id == reg_id,
-        Registration.user_id == current_user.user_id
-    ).first()
+    # If user is admin → allow cancelling any registration
+    if current_user.role == "admin":
+        registration = db.query(Registration).filter(
+            Registration.reg_id == reg_id
+        ).first()
+    else:
+        # Regular user → can only cancel their own registration
+        registration = db.query(Registration).filter(
+            Registration.reg_id == reg_id,
+            Registration.user_id == current_user.user_id
+        ).first()
 
     if not registration:
         raise HTTPException(status_code=404, detail="Registration not found")
