@@ -1,41 +1,47 @@
 import {
-  BadgeCheck,
   Bell,
-  ChevronsUpDown,
-  CreditCard,
   LogOut,
   Sparkles,
+  CreditCard,
+  BadgeCheck,
+  ChevronsUpDown,
 } from "lucide-react";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  useSidebar,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuGroup,
   DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
+import { removeUser } from "@/utils/user";
+import { removeToken } from "@/utils/token";
+import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function NavUser({ user }) {
   const { isMobile } = useSidebar();
+  const navigate = useNavigate();
 
   function getAvatarFallback(name = "") {
     const parts = name.trim().split(/\s+/);
-
     if (parts.length === 0 || !parts[0]) return "??";
-    if (parts.length === 1) {
-      return parts[0][0].toUpperCase();
-    }
+    if (parts.length === 1) return parts[0][0].toUpperCase();
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
+
+  const handleLogout = () => {
+    removeToken();
+    removeUser();
+    navigate("/login");
+  };
 
   return (
     <SidebarMenu>
@@ -100,7 +106,7 @@ export function NavUser({ user }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>
