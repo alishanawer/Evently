@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMyRegistrations } from "@/api/registration";
+import { getMyRegistrations, cancelRegistration } from "@/api/registration";
 import {
   Table,
   TableBody,
@@ -39,13 +39,11 @@ export default function Registrations() {
     }
   };
 
-  // Mock cancel registration API call
   const handleCancelRegistration = async () => {
     if (!registrationToCancel) return;
 
     try {
-      // Simulate API delay
-      await new Promise((res) => setTimeout(res, 600));
+      await cancelRegistration(registrationToCancel);
       setRegistrations((prev) =>
         prev.filter((reg) => reg.reg_id !== registrationToCancel)
       );
