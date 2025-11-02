@@ -74,10 +74,16 @@ def view_my_registrations(
     result = []
     for reg in registrations:
         ticket = db.query(Ticket).filter(Ticket.reg_id == reg.reg_id).first()
+        event = db.query(Event).filter(Event.event_id == reg.event_id).first()
         result.append({
             "reg_id": reg.reg_id,
             "user_id": reg.user_id,
-            "event_id": reg.event_id,
+            "event_id": event.event_id,
+            "event_title": event.title if event else None,
+            "event_date": event.date if event else None,
+            "event_time": event.time if event else None,
+            "event_venue": event.venue if event else None,
+            "event_price": event.price if event else None,
             "reg_date": reg.reg_date,
             "ticket_id": ticket.ticket_id if ticket else None,
             "ticket_status": ticket.status if ticket else None
