@@ -1,10 +1,10 @@
 import Events from "./pages/events";
-import Tickets from "./pages/tickets";
 import LoginPage from "./pages/login";
 import Settings from "./pages/settings";
 import SignupPage from "./pages/signup";
 import Layout from "./components/layout";
 import Dashboard from "./pages/dashboard";
+import Tickets from "./pages/registrations";
 import AdminEvents from "./pages/admin/events";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
