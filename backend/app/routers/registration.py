@@ -61,6 +61,35 @@ def register_for_event(
     }
 
 
+# Cancel Registration — User Only
+@router.delete("/{reg_id}", status_code=status.HTTP_204_NO_CONTENT)
+def cancel_registration(
+    reg_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    # Check if registration exists and belongs to user
+    registration = db.query(Registration).filter(
+        Registration.reg_id == reg_id,
+        Registration.user_id == current_user.user_id
+    ).first()
+
+    if not registration:
+        raise HTTPException(status_code=404, detail="Registration not found")
+
+    # Delete related ticket first (flush to persist)
+    ticket = db.query(Ticket).filter(Ticket.reg_id == reg_id).first()
+    if ticket:
+        db.delete(ticket)
+        db.flush()
+
+    # Now delete the registration
+    db.delete(registration)
+    db.commit()
+
+    return
+
+
 # View My Registrations — User Only
 @router.get("/me", response_model=list[RegistrationOut])
 def view_my_registrations(
