@@ -7,6 +7,7 @@ import Dashboard from "./pages/dashboard";
 import Tickets from "./pages/registrations";
 import AdminEvents from "./pages/admin/events";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import EventRegistrationsAdmin from "./pages/admin/registrations";
 
 export default function App() {
   return (
@@ -18,6 +19,10 @@ export default function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/events" element={<Events />} />
           <Route path="/admin/events" element={<AdminEvents />} />
+          <Route
+            path="/admin/registrations"
+            element={<EventRegistrationsAdmin />}
+          />
           <Route path="/tickets" element={<Tickets />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
