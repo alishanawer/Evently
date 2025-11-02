@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMyRegistrations } from "@/api/registeration";
+import { getMyRegistrations } from "@/api/registration";
 import {
   Table,
   TableBody,

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Calendar, Clock8, MapPin, DollarSign } from "lucide-react";
 import { getUser } from "@/utils/user";
-import { registerForEvent } from "@/api/registeration";
+import { registerForEvent } from "@/api/registration";
 import { toast } from "sonner";
 
 // Small helper to truncate text without cutting words.
