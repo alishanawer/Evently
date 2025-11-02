@@ -4,7 +4,7 @@ import Settings from "./pages/settings";
 import SignupPage from "./pages/signup";
 import Layout from "./components/layout";
 import Dashboard from "./pages/dashboard";
-import Tickets from "./pages/registrations";
+import Registrations from "./pages/registrations";
 import AdminEvents from "./pages/admin/events";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import EventRegistrationsAdmin from "./pages/admin/registrations";
@@ -18,12 +18,12 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/manage-events" element={<AdminEvents />} />
           <Route
-            path="/admin/registrations"
+            path="/manage-registrations"
             element={<EventRegistrationsAdmin />}
           />
-          <Route path="/tickets" element={<Tickets />} />
+          <Route path="/my-registrations" element={<Registrations />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>

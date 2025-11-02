@@ -1,36 +1,49 @@
-"use client";
-
-import * as React from "react";
-import { useLocation, Link } from "react-router-dom";
 import {
-  BookOpen,
-  Bot,
+  Users,
   Command,
-  Settings2,
-  SquareTerminal,
+  TicketCheck,
+  CalendarCog,
+  CalendarDays,
+  LayoutDashboard,
 } from "lucide-react";
-
 import {
   Sidebar,
-  SidebarContent,
+  SidebarMenu,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
+  SidebarContent,
   SidebarMenuItem,
+  SidebarMenuButton,
 } from "@/components/ui/sidebar";
+import { getUser } from "@/utils/user";
 import { NavUser } from "@/components/nav-user";
+import { useLocation, Link } from "react-router-dom";
 
 export function AppSidebar({ ...props }) {
   const location = useLocation();
+  const user = getUser();
 
   const navMain = [
-    { title: "Dashboard", url: "/", icon: SquareTerminal },
-    { title: "Events", url: "/events", icon: Bot },
-    { title: "Manage Events", url: "/admin/events", icon: Settings2 },
-    { title: "Tickets", url: "/tickets", icon: BookOpen },
-    { title: "Settings", url: "/settings", icon: Settings2 },
+    { title: "Dashboard", url: "/", icon: LayoutDashboard },
+    { title: "Events", url: "/events", icon: CalendarDays },
+    { title: "My Registrations", url: "/my-registrations", icon: TicketCheck },
+    {
+      title: "Manage Events",
+      url: "/manage-events",
+      icon: CalendarCog,
+      adminOnly: true,
+    },
+    {
+      title: "Manage Registrations",
+      url: "/manage-registrations",
+      icon: Users,
+      adminOnly: true,
+    },
   ];
+
+  const visibleNav = navMain.filter(
+    (item) => !item.adminOnly || user?.role === "admin"
+  );
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -53,7 +66,7 @@ export function AppSidebar({ ...props }) {
 
       <SidebarContent>
         <SidebarMenu>
-          {navMain.map((item) => {
+          {visibleNav.map((item) => {
             const isActive =
               location.pathname === item.url ||
               (item.url !== "/" && location.pathname.startsWith(item.url));
@@ -74,13 +87,7 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser
-          user={{
-            name: "shadcn",
-            email: "m@example.com",
-            avatar: "/avatars/shadcn.jpg",
-          }}
-        />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );
