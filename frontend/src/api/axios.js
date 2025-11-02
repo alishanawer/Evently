@@ -1,8 +1,10 @@
 import axios from "axios";
 import { getToken } from "../utils/token";
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },
