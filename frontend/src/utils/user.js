@@ -1,5 +1,7 @@
+import { parseJwt } from "./token";
+
 export const saveUser = (loginData) => {
-  let user = {
+  const user = {
     id: loginData.id,
     name: loginData.name,
     email: loginData.email,
@@ -9,7 +11,11 @@ export const saveUser = (loginData) => {
 };
 
 export const getUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
+  try {
+    return JSON.parse(localStorage.getItem("user"));
+  } catch {
+    return null;
+  }
 };
 
 export const removeUser = () => {
@@ -18,5 +24,10 @@ export const removeUser = () => {
 
 export const isAdmin = () => {
   const user = getUser();
-  return user && user.role === "admin";
+  if (user && user.role === "admin") return true;
+  // fallback: check token payload role if present (less trusted)
+  const token = localStorage.getItem("access_token");
+  if (!token) return false;
+  const payload = parseJwt(token);
+  return payload?.role === "admin";
 };
